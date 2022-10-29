@@ -52,22 +52,25 @@ tokenizer = load(open("tokenizer.p","rb"))
 model = load_model('models/model_9.h5')
 xception_model = Xception(include_top=False, pooling="avg")
 
-img_folder = r"C:\Users\christine\Desktop\testlabel\*" # add \* at the back of the path
+img_folder = r"C:\Users\christine\Desktop\pics\*" # add \* at the back of the path
 img_name = glob(img_folder +'*.jpg')
 labels = {}
 
 for i in img_name:
-    filename = i[37:] # slice only the image name e.g. path="C:\Users\christine\Desktop\datamining\data\scamimage\05johnsmith1.jpg" we only want 05johnsmith1.jpg, pls slice accordingly 
+    filename = i[32:] # slice only the image name e.g. path="C:\Users\christine\Desktop\datamining\data\scamimage\05johnsmith1.jpg" we only want 05johnsmith1.jpg, pls slice accordingly 
 
     photo = extract_features(i, xception_model)
     img = Image.open(i)
     description = generate_desc(model, tokenizer, photo, max_length)
+
+    #remove start and end
+    description = description[6:-4]
     labels[filename] = description
 
 json_object = json.dumps(labels) 
 
 # change the filename to your name
-with open('labels_yourname.json', 'w') as f:
+with open('labels_chris.json', 'w') as f:
   json.dump(labels, f, ensure_ascii=False)
 
 print('\n\n DONE ALR :DDD')
